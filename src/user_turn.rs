@@ -1,7 +1,7 @@
 use std::io::{stdin,stdout,Write};
 
 fn into_u8(input: Vec<&str>) -> [usize;2] {
-    return [0,0];
+    
 }
 
 pub fn get_user_turn() -> [usize;2] {
