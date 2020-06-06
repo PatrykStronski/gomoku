@@ -1,11 +1,6 @@
 fn calculate_horizontal_points(board: &[[u8; 15]; 15], x: usize, y: usize, gamer_code: u8) -> u8 {
     let mut points = 0;
-    let mut curr_x = x;
-    while board[curr_x][y] == gamer_code {
-        points += 1;
-        curr_x -= 1;
-    }
-    curr_x = x + 1;
+    let mut curr_x = x + 1;
     while curr_x < 15 && board[curr_x][y] == gamer_code {
         points += 1;
         curr_x += 1;
@@ -15,12 +10,7 @@ fn calculate_horizontal_points(board: &[[u8; 15]; 15], x: usize, y: usize, gamer
 
 fn calculate_vertical_points(board: &[[u8; 15]; 15], x: usize, y: usize, gamer_code: u8) -> u8 {
     let mut points = 0;
-    let mut curr_y = y;
-    while board[x][curr_y] == gamer_code {
-        points += 1;
-        curr_y -= 1;
-    }
-    curr_y = y + 1;
+    let mut curr_y = y + 1;
     while curr_y < 15 && board[x][curr_y] == gamer_code {
         points += 1;
         curr_y += 1;
@@ -45,15 +35,15 @@ fn calculate_diagonal_points_left(
     gamer_code: u8,
 ) -> u8 {
     let mut points = 0;
-    let mut curr_y = y;
-    let mut curr_x = x;
+    let mut curr_y = y + 1;
+    let mut curr_x = x - 1;
     while points_valid(curr_x, curr_y) && board[curr_x][curr_y] == gamer_code {
         points += 1;
         curr_x -= 1;
         curr_y += 1;
     }
-    curr_y = y;
-    curr_x = x;
+    curr_y = y - 1;
+    curr_x = x + 1;
     while points_valid(curr_x, curr_y) && board[curr_x][curr_y] == gamer_code {
         points += 1;
         curr_x += 1;
@@ -69,15 +59,15 @@ fn calculate_diagonal_points_right(
     gamer_code: u8,
 ) -> u8 {
     let mut points = 0;
-    let mut curr_y = y;
-    let mut curr_x = x;
+    let mut curr_y = y + 1;
+    let mut curr_x = x + 1;
     while points_valid(curr_x, curr_y) && board[curr_x][curr_y] == gamer_code {
         points += 1;
         curr_x += 1;
         curr_y += 1;
     }
-    curr_y = y;
-    curr_x = x;
+    curr_y = y - 1;
+    curr_x = x - 1;
     while points_valid(curr_x, curr_y) && board[curr_x][curr_y] == gamer_code {
         points += 1;
         curr_x -= 1;

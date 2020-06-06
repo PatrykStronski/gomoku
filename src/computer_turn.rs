@@ -49,7 +49,7 @@ fn get_considerate_fields(board: &[[u8; 15]; 15]) -> Vec<[usize; 2]> {
     let mut fields = Vec::<[usize; 2]>::with_capacity(8);
     for x in 0usize..15usize {
         for y in 0usize..15usize {
-            if are_adjacent_filled(board, x, y) {
+            if are_adjacent_filled(board, x, y) && board[x][y] == 0 {
                 let mut coords = [x, y];
                 fields.push(coords);
             }
@@ -58,7 +58,10 @@ fn get_considerate_fields(board: &[[u8; 15]; 15]) -> Vec<[usize; 2]> {
     return fields;
 }
 
-fn calculate_player_eventual_moves(board: &[[u8; 15]; 15], considerate_fields: &Vec<[usize; 2]>) -> Vec<TreeSegment> {
+fn calculate_player_eventual_moves(
+    board: &[[u8; 15]; 15],
+    considerate_fields: &Vec<[usize; 2]>,
+) -> Vec<TreeSegment> {
     let mut eventual_moves = Vec::<TreeSegment>::with_capacity(considerate_fields.len());
     for field in considerate_fields {
         let mut tr = TreeSegment {
@@ -71,7 +74,10 @@ fn calculate_player_eventual_moves(board: &[[u8; 15]; 15], considerate_fields: &
     return eventual_moves;
 }
 
-fn calculate_computer_eventual_moves(board: &[[u8; 15]; 15], considerate_fields: &Vec<[usize; 2]>) -> Vec<TreeSegment> {
+fn calculate_computer_eventual_moves(
+    board: &[[u8; 15]; 15],
+    considerate_fields: &Vec<[usize; 2]>,
+) -> Vec<TreeSegment> {
     let mut eventual_moves = Vec::<TreeSegment>::with_capacity(considerate_fields.len());
     for field_id in 0..considerate_fields.len() {
         let mut new_considerate_fields = considerate_fields.to_vec();
@@ -95,6 +101,7 @@ fn get_best_move(moves: &Vec<TreeSegment>) -> [usize; 2] {
             coordinates = single_move.coordinates;
         }
     }
+    println!("{:?}", coordinates);
     return coordinates;
 }
 
