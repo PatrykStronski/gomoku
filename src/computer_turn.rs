@@ -58,6 +58,16 @@ fn get_considerate_fields(board: &[[u8; 15]; 15]) -> Vec<[usize; 2]> {
     return fields;
 }
 
+fn copy_board(board: &[[u8; 15]; 15]) -> [[u8; 15]; 15] {
+    let mut new_board = [[0u8; 15]; 15];
+    for x in 0..15 {
+        for y in 0..15 {
+            new_board[x][y] = board[x][y];
+        }
+    }
+    return new_board;
+}
+
 fn calculate_player_eventual_moves(
     board: &[[u8; 15]; 15],
     considerate_fields: &Vec<[usize; 2]>,
@@ -69,11 +79,13 @@ fn calculate_player_eventual_moves(
     let mut eventual_moves = Vec::<TreeSegment>::with_capacity(considerate_fields.len());
     for field_id in 0..considerate_fields.len() {
         let mut new_considerate_fields = considerate_fields.to_vec();
-        new_considerate_fields.remove(field_id);
+        let field = new_considerate_fields.remove(field_id);
+        let mut new_board = copy_board(board);
+        new_board[field[0]][field[1]] = 1;
         let tr = TreeSegment {
             coordinates: considerate_fields[field_id],
-            gain: -calculate_field_points(board, considerate_fields[field_id], 1, true),
-            leaves: calculate_computer_eventual_moves(board, &new_considerate_fields, depth - 1),
+            gain: -calculate_field_points(&new_board, considerate_fields[field_id], 1, true),
+            leaves: calculate_computer_eventual_moves(&new_board, &new_considerate_fields, depth - 1),
             minimize_leaves: false,
         };
         eventual_moves.push(tr);
@@ -92,11 +104,13 @@ fn calculate_computer_eventual_moves(
     let mut eventual_moves = Vec::<TreeSegment>::with_capacity(considerate_fields.len());
     for field_id in 0..considerate_fields.len() {
         let mut new_considerate_fields = considerate_fields.to_vec();
-        new_considerate_fields.remove(field_id);
+        let field = new_considerate_fields.remove(field_id);
+        let mut new_board = copy_board(board);
+        new_board[field[0]][field[1]] = 2;
         eventual_moves.push(TreeSegment {
             coordinates: considerate_fields[field_id],
-            gain: calculate_field_points(board, considerate_fields[field_id], 2, true),
-            leaves: calculate_player_eventual_moves(board, &new_considerate_fields, depth - 1),
+            gain: calculate_field_points(&new_board, considerate_fields[field_id], 2, true),
+            leaves: calculate_player_eventual_moves(&new_board, &new_considerate_fields, depth - 1),
             minimize_leaves: true,
         });
     }
