@@ -38,12 +38,12 @@ fn duel(board: &mut [[u8; 15]; 15]) -> u8 {
     print_board(board);
     let user_turn = get_user_turn();
     board[user_turn[0]][user_turn[1]] = 1;
-    if calculate_field_points(board, user_turn, 1, false) >= 5 {
+    if calculate_field_points(board, user_turn, 1) >= 5 {
         return 1;
     }
     let computer_turn = get_single_turn(board);
     board[computer_turn[0]][computer_turn[1]] = 2;
-    if calculate_field_points(board, computer_turn, 2, false) >= 5 {
+    if calculate_field_points(board, computer_turn, 2) >= 5 {
         return 2;
     }
     return duel(board);

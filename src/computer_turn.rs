@@ -84,8 +84,12 @@ fn calculate_player_eventual_moves(
         new_board[field[0]][field[1]] = 1;
         let tr = TreeSegment {
             coordinates: considerate_fields[field_id],
-            gain: -calculate_field_points(&new_board, considerate_fields[field_id], 1, true),
-            leaves: calculate_computer_eventual_moves(&new_board, &new_considerate_fields, depth - 1),
+            gain: -calculate_field_points(&new_board, considerate_fields[field_id], 1),
+            leaves: calculate_computer_eventual_moves(
+                &new_board,
+                &new_considerate_fields,
+                depth - 1,
+            ),
             minimize_leaves: false,
         };
         eventual_moves.push(tr);
@@ -109,7 +113,7 @@ fn calculate_computer_eventual_moves(
         new_board[field[0]][field[1]] = 2;
         eventual_moves.push(TreeSegment {
             coordinates: considerate_fields[field_id],
-            gain: calculate_field_points(&new_board, considerate_fields[field_id], 2, true),
+            gain: calculate_field_points(&new_board, considerate_fields[field_id], 2),
             leaves: calculate_player_eventual_moves(&new_board, &new_considerate_fields, depth - 1),
             minimize_leaves: true,
         });

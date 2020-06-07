@@ -25,6 +25,9 @@ impl TreeSegment {
         if self.leaves.len() == 0 {
             return self.gain;
         }
+        if self.gain >= -5 {
+            return self.gain;
+        }
         if self.minimize_leaves {
             return self.get_lowest_gain() + self.gain;
         }

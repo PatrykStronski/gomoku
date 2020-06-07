@@ -158,8 +158,7 @@ fn calculate_diagonal_points(board: &[[u8; 15]; 15], x: usize, y: usize, gamer_c
 pub fn calculate_field_points(
     board: &[[u8; 15]; 15],
     coordinates: [usize; 2],
-    gamer_code: u8,
-    assume_filled: bool,
+    gamer_code: u8
 ) -> i8 {
     let mut points = 0i8;
     let horizontal = calculate_horizontal_points(board, coordinates[0], coordinates[1], gamer_code);
@@ -173,9 +172,7 @@ pub fn calculate_field_points(
     if points < diagonal {
         points = diagonal;
     }
-    if board[coordinates[0]][coordinates[1]] == gamer_code
-        || (board[coordinates[0]][coordinates[1]] != gamer_code && assume_filled)
-    {
+    if board[coordinates[0]][coordinates[1]] == gamer_code {
         points += 1;
     }
     return points;
