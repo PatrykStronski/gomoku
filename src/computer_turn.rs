@@ -64,7 +64,7 @@ fn calculate_player_eventual_moves(
 ) -> Vec<TreeSegment> {
     let mut eventual_moves = Vec::<TreeSegment>::with_capacity(considerate_fields.len());
     for field in considerate_fields {
-        let mut tr = TreeSegment {
+        let tr = TreeSegment {
             coordinates: *field,
             gain: 5 - calculate_field_points(board, *field, 1, true),
             leaves: Vec::<TreeSegment>::new(),
@@ -101,7 +101,6 @@ fn get_best_move(moves: &Vec<TreeSegment>) -> [usize; 2] {
             coordinates = single_move.coordinates;
         }
     }
-    println!("{:?}", coordinates);
     return coordinates;
 }
 
