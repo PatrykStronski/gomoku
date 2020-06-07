@@ -1,4 +1,4 @@
-fn calculate_horizontal_points(board: &[[u8; 15]; 15], x: usize, y: usize, gamer_code: u8) -> u8 {
+fn calculate_horizontal_points(board: &[[u8; 15]; 15], x: usize, y: usize, gamer_code: u8) -> i8 {
     let mut points = 0;
     let mut curr_x = x + 1;
     while curr_x < 15 && board[curr_x][y] == gamer_code {
@@ -8,7 +8,7 @@ fn calculate_horizontal_points(board: &[[u8; 15]; 15], x: usize, y: usize, gamer
     return points;
 }
 
-fn calculate_vertical_points(board: &[[u8; 15]; 15], x: usize, y: usize, gamer_code: u8) -> u8 {
+fn calculate_vertical_points(board: &[[u8; 15]; 15], x: usize, y: usize, gamer_code: u8) -> i8 {
     let mut points = 0;
     let mut curr_y = y + 1;
     while curr_y < 15 && board[x][curr_y] == gamer_code {
@@ -47,7 +47,7 @@ fn calculate_diagonal_points_left(
     x: usize,
     y: usize,
     gamer_code: u8,
-) -> u8 {
+) -> i8 {
     let mut points = 0;
     let mut curr_y = 0;
     let mut curr_x = 0;
@@ -83,7 +83,7 @@ fn calculate_diagonal_points_right(
     x: usize,
     y: usize,
     gamer_code: u8,
-) -> u8 {
+) -> i8 {
     let mut points = 0;
     let mut curr_y = 0;
     let mut curr_x = 0;
@@ -114,7 +114,7 @@ fn calculate_diagonal_points_right(
     return points;
 }
 
-fn calculate_diagonal_points(board: &[[u8; 15]; 15], x: usize, y: usize, gamer_code: u8) -> u8 {
+fn calculate_diagonal_points(board: &[[u8; 15]; 15], x: usize, y: usize, gamer_code: u8) -> i8 {
     let left = calculate_diagonal_points_left(board, x, y, gamer_code);
     let right = calculate_diagonal_points_right(board, x, y, gamer_code);
     if left > right {
@@ -128,8 +128,8 @@ pub fn calculate_field_points(
     coordinates: [usize; 2],
     gamer_code: u8,
     assume_filled: bool,
-) -> u8 {
-    let mut points = 0u8;
+) -> i8 {
+    let mut points = 0i8;
     let horizontal = calculate_horizontal_points(board, coordinates[0], coordinates[1], gamer_code);
     let vertical = calculate_vertical_points(board, coordinates[0], coordinates[1], gamer_code);
     let diagonal = calculate_diagonal_points(board, coordinates[0], coordinates[1], gamer_code);
@@ -141,8 +141,10 @@ pub fn calculate_field_points(
     if points < diagonal {
         points = diagonal;
     }
-    if board[coordinates[0]][coordinates[1]] == gamer_code || (board[coordinates[0]][coordinates[1]] != gamer_code && assume_filled) {
-        points += 1;  
+    if board[coordinates[0]][coordinates[1]] == gamer_code
+        || (board[coordinates[0]][coordinates[1]] != gamer_code && assume_filled)
+    {
+        points += 1;
     }
     return points;
 }

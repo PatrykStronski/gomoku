@@ -1,15 +1,15 @@
 pub struct TreeSegment {
     pub coordinates: [usize; 2],
-    pub gain: u8,
+    pub gain: i8,
     pub leaves: Vec<TreeSegment>,
 }
 
 impl TreeSegment {
-    pub fn get_highest_gain(&self) -> u8 {
+    pub fn get_highest_gain(&self) -> i8 {
         if self.leaves.len() == 0 {
             return self.gain;
         }
-        let mut proposed_leaf_gain = 0u8;
+        let mut proposed_leaf_gain = 0i8;
         for leaf_id in 0..self.leaves.len() {
             let leaf = &self.leaves[leaf_id];
             let proposition = leaf.get_highest_gain();
