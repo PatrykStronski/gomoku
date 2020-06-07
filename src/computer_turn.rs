@@ -66,7 +66,7 @@ fn calculate_player_eventual_moves(
     for field in considerate_fields {
         let tr = TreeSegment {
             coordinates: *field,
-            gain: 5 - calculate_field_points(board, *field, 1, true),
+            gain: -calculate_field_points(board, *field, 1, true),
             leaves: Vec::<TreeSegment>::new(),
         };
         eventual_moves.push(tr);
