@@ -61,13 +61,19 @@ fn get_considerate_fields(board: &[[u8; 15]; 15]) -> Vec<[usize; 2]> {
 fn calculate_player_eventual_moves(
     board: &[[u8; 15]; 15],
     considerate_fields: &Vec<[usize; 2]>,
+    depth: u8
 ) -> Vec<TreeSegment> {
+    if depth == 0 {
+        return Vec::<TreeSegment>::new();
+    }
     let mut eventual_moves = Vec::<TreeSegment>::with_capacity(considerate_fields.len());
-    for field in considerate_fields {
+    for field_id in 0..considerate_fields.len() {
+        let mut new_considerate_fields = considerate_fields.to_vec();
+        new_considerate_fields.remove(field_id);
         let tr = TreeSegment {
-            coordinates: *field,
-            gain: - calculate_field_points(board, *field, 1, true),
-            leaves: Vec::<TreeSegment>::new(),
+            coordinates: considerate_fields[field_id],
+            gain: - calculate_field_points(board, considerate_fields[field_id], 1, true),
+            leaves: calculate_computer_eventual_moves(board, &new_considerate_fields, depth - 1),
             minimize_leaves: false
         };
         eventual_moves.push(tr);
@@ -78,7 +84,11 @@ fn calculate_player_eventual_moves(
 fn calculate_computer_eventual_moves(
     board: &[[u8; 15]; 15],
     considerate_fields: &Vec<[usize; 2]>,
+    depth: u8
 ) -> Vec<TreeSegment> {
+    if depth == 0 {
+        return Vec::<TreeSegment>::new();
+    }
     let mut eventual_moves = Vec::<TreeSegment>::with_capacity(considerate_fields.len());
     for field_id in 0..considerate_fields.len() {
         let mut new_considerate_fields = considerate_fields.to_vec();
@@ -86,7 +96,7 @@ fn calculate_computer_eventual_moves(
         eventual_moves.push(TreeSegment {
             coordinates: considerate_fields[field_id],
             gain: calculate_field_points(board, considerate_fields[field_id], 2, true),
-            leaves: calculate_player_eventual_moves(board, &new_considerate_fields),
+            leaves: calculate_player_eventual_moves(board, &new_considerate_fields, depth - 1),
             minimize_leaves: true
         });
     }
@@ -108,6 +118,6 @@ fn get_best_move(moves: &Vec<TreeSegment>) -> [usize; 2] {
 
 pub fn get_single_turn(board: &[[u8; 15]; 15]) -> [usize; 2] {
     let considerate_fields = get_considerate_fields(board);
-    let eventual_moves = calculate_computer_eventual_moves(board, &considerate_fields);
+    let eventual_moves = calculate_computer_eventual_moves(board, &considerate_fields, 5);
     return get_best_move(&eventual_moves);
 }
