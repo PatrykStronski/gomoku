@@ -61,7 +61,7 @@ fn get_considerate_fields(board: &[[u8; 15]; 15]) -> Vec<[usize; 2]> {
 fn calculate_player_eventual_moves(
     board: &[[u8; 15]; 15],
     considerate_fields: &Vec<[usize; 2]>,
-    depth: u8
+    depth: u8,
 ) -> Vec<TreeSegment> {
     if depth == 0 {
         return Vec::<TreeSegment>::new();
@@ -72,9 +72,9 @@ fn calculate_player_eventual_moves(
         new_considerate_fields.remove(field_id);
         let tr = TreeSegment {
             coordinates: considerate_fields[field_id],
-            gain: - calculate_field_points(board, considerate_fields[field_id], 1, true),
+            gain: -calculate_field_points(board, considerate_fields[field_id], 1, true),
             leaves: calculate_computer_eventual_moves(board, &new_considerate_fields, depth - 1),
-            minimize_leaves: false
+            minimize_leaves: false,
         };
         eventual_moves.push(tr);
     }
@@ -84,7 +84,7 @@ fn calculate_player_eventual_moves(
 fn calculate_computer_eventual_moves(
     board: &[[u8; 15]; 15],
     considerate_fields: &Vec<[usize; 2]>,
-    depth: u8
+    depth: u8,
 ) -> Vec<TreeSegment> {
     if depth == 0 {
         return Vec::<TreeSegment>::new();
@@ -97,7 +97,7 @@ fn calculate_computer_eventual_moves(
             coordinates: considerate_fields[field_id],
             gain: calculate_field_points(board, considerate_fields[field_id], 2, true),
             leaves: calculate_player_eventual_moves(board, &new_considerate_fields, depth - 1),
-            minimize_leaves: true
+            minimize_leaves: true,
         });
     }
     return eventual_moves;
@@ -118,6 +118,6 @@ fn get_best_move(moves: &Vec<TreeSegment>) -> [usize; 2] {
 
 pub fn get_single_turn(board: &[[u8; 15]; 15]) -> [usize; 2] {
     let considerate_fields = get_considerate_fields(board);
-    let eventual_moves = calculate_computer_eventual_moves(board, &considerate_fields, 5);
+    let eventual_moves = calculate_computer_eventual_moves(board, &considerate_fields, 4);
     return get_best_move(&eventual_moves);
 }

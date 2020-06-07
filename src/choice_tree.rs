@@ -15,7 +15,7 @@ impl TreeSegment {
                 proposed_leaf_gain = proposition;
             }
             if proposed_leaf_gain <= -5 {
-                return proposed_leaf_gain;
+                return proposed_leaf_gain * 2;
             }
         }
         return proposed_leaf_gain;
