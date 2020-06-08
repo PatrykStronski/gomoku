@@ -98,7 +98,7 @@ fn calculate_player_eventual_moves(
         } else {
             let tr = TreeSegment {
                 coordinates: considerate_fields[field_id],
-                gain: -calculate_field_points(&new_board, considerate_fields[field_id], 1) * depth,
+                gain: -calculate_field_points(&new_board, considerate_fields[field_id], 1),
                 leaves: Vec::<TreeSegment>::new(),
                 minimize_leaves: false,
             };
