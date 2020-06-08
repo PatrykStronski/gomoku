@@ -7,7 +7,8 @@ fn into_usize(input: Vec<&str>) -> [usize; 2] {
 }
 
 fn invalid_coordinates(out_usize: [usize; 2]) -> bool {
-    let condition = out_usize[0] >= 0 && out_usize[0] < 15 && out_usize[1] >= 0 && out_usize[1] < 15;
+    let condition =
+        out_usize[0] >= 0 && out_usize[0] < 15 && out_usize[1] >= 0 && out_usize[1] < 15;
     if condition {
         return false;
     }

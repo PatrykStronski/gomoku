@@ -22,8 +22,8 @@ impl TreeSegment {
         if self.leaves.len() == 0 {
             return self.gain;
         }
-        if self.gain >= -5 {
-            return self.gain;
+        if self.minimize_leaves {
+            return self.gain + self.get_lowest_gain();
         }
         let mut proposed_leaf_gain = 0i8;
         for leaf_id in 0..self.leaves.len() {
