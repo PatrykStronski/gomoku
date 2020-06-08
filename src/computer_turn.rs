@@ -93,7 +93,7 @@ fn calculate_player_eventual_moves(
         }
         let tr = TreeSegment {
             coordinates: considerate_fields[field_id],
-            gain: gain,
+            gain: -gain,
             leaves: calculate_computer_eventual_moves(
                 &new_board,
                 &new_considerate_fields,
@@ -163,6 +163,6 @@ fn get_best_move(moves: &Vec<TreeSegment>) -> [usize; 2] {
 pub fn get_single_turn(board: &[[u8; 15]; 15]) -> [usize; 2] {
     let considerate_fields = get_considerate_fields(board);
     let eventual_moves =
-        calculate_computer_eventual_moves(board, &considerate_fields, 6, -100, 100);
+        calculate_computer_eventual_moves(board, &considerate_fields, 5, -100, 100);
     return get_best_move(&eventual_moves);
 }
