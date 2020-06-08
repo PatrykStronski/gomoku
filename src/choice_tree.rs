@@ -16,7 +16,7 @@ impl TreeSegment {
                 best_leaf_gain = self.leaves[leaf_id].gain;
                 proposed_leaf_id = leaf_id;
             }
-            if self.leaves[leaf_id].gain == -5 {
+            if self.leaves[leaf_id].gain <= -5 {
                 break;
             }
         }
