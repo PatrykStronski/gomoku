@@ -14,9 +14,6 @@ impl TreeSegment {
             if proposition < proposed_leaf_gain {
                 proposed_leaf_gain = proposition;
             }
-            if proposed_leaf_gain <= -5 {
-                return proposed_leaf_gain * 2;
-            }
         }
         return proposed_leaf_gain + self.gain;
     }
@@ -35,9 +32,6 @@ impl TreeSegment {
         for leaf_id in 0..self.leaves.len() {
             let leaf = &self.leaves[leaf_id];
             let proposition = leaf.get_highest_gain();
-            if proposition <= -5 {
-                return proposition;
-            }
             if proposition > proposed_leaf_gain {
                 proposed_leaf_gain = proposition;
             }

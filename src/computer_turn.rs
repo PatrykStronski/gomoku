@@ -72,6 +72,8 @@ fn calculate_player_eventual_moves(
     board: &[[u8; 15]; 15],
     considerate_fields: &Vec<[usize; 2]>,
     depth: u8,
+    alpha: i8,
+    mut beta: i8,
 ) -> Vec<TreeSegment> {
     if depth == 0 {
         return Vec::<TreeSegment>::new();
@@ -82,28 +84,26 @@ fn calculate_player_eventual_moves(
         let field = new_considerate_fields.remove(field_id);
         let mut new_board = copy_board(board);
         new_board[field[0]][field[1]] = 1;
-        let field_points = calculate_field_points(&new_board, considerate_fields[field_id], 1);
-        if field_points < 5 {
-            let tr = TreeSegment {
-                coordinates: considerate_fields[field_id],
-                gain: -calculate_field_points(&new_board, considerate_fields[field_id], 1),
-                leaves: calculate_computer_eventual_moves(
-                    &new_board,
-                    &new_considerate_fields,
-                    depth - 1,
-                ),
-                minimize_leaves: false,
-            };
-            eventual_moves.push(tr);
-        } else {
-            let tr = TreeSegment {
-                coordinates: considerate_fields[field_id],
-                gain: -calculate_field_points(&new_board, considerate_fields[field_id], 1),
-                leaves: Vec::<TreeSegment>::new(),
-                minimize_leaves: false,
-            };
-            eventual_moves.push(tr);
+        let gain = calculate_field_points(&new_board, considerate_fields[field_id], 1);
+        if beta > gain {
+            beta = gain;
         }
+        if beta <= alpha {
+            break;
+        }
+        let tr = TreeSegment {
+            coordinates: considerate_fields[field_id],
+            gain: gain,
+            leaves: calculate_computer_eventual_moves(
+                &new_board,
+                &new_considerate_fields,
+                depth - 1,
+                alpha,
+                beta,
+            ),
+            minimize_leaves: false,
+        };
+        eventual_moves.push(tr);
     }
     return eventual_moves;
 }
@@ -112,6 +112,8 @@ fn calculate_computer_eventual_moves(
     board: &[[u8; 15]; 15],
     considerate_fields: &Vec<[usize; 2]>,
     depth: u8,
+    mut alpha: i8,
+    beta: i8,
 ) -> Vec<TreeSegment> {
     if depth == 0 {
         return Vec::<TreeSegment>::new();
@@ -121,11 +123,24 @@ fn calculate_computer_eventual_moves(
         let mut new_considerate_fields = considerate_fields.to_vec();
         let field = new_considerate_fields.remove(field_id);
         let mut new_board = copy_board(board);
+        let gain = calculate_field_points(&new_board, considerate_fields[field_id], 2);
+        if alpha < gain {
+            alpha = gain;
+        }
+        if beta <= alpha {
+            break;
+        }
         new_board[field[0]][field[1]] = 2;
         eventual_moves.push(TreeSegment {
             coordinates: considerate_fields[field_id],
-            gain: calculate_field_points(&new_board, considerate_fields[field_id], 2),
-            leaves: calculate_player_eventual_moves(&new_board, &new_considerate_fields, depth - 1),
+            gain: gain,
+            leaves: calculate_player_eventual_moves(
+                &new_board,
+                &new_considerate_fields,
+                depth - 1,
+                alpha,
+                beta,
+            ),
             minimize_leaves: true,
         });
     }
@@ -147,6 +162,7 @@ fn get_best_move(moves: &Vec<TreeSegment>) -> [usize; 2] {
 
 pub fn get_single_turn(board: &[[u8; 15]; 15]) -> [usize; 2] {
     let considerate_fields = get_considerate_fields(board);
-    let eventual_moves = calculate_computer_eventual_moves(board, &considerate_fields, 5);
+    let eventual_moves =
+        calculate_computer_eventual_moves(board, &considerate_fields, 6, -100, 100);
     return get_best_move(&eventual_moves);
 }
