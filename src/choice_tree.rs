@@ -38,6 +38,6 @@ impl TreeSegment {
                 proposed_leaf_gain = proposition;
             }
         }
-        return proposed_leaf_gain + self.gain;
+        return proposed_leaf_gain;
     }
 }

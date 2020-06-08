@@ -88,7 +88,7 @@ fn calculate_player_eventual_moves(
         if beta > gain {
             beta = gain;
         }
-        if beta <= alpha {
+        if beta >= alpha {
             break;
         }
         let tr = TreeSegment {
