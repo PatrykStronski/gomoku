@@ -18,7 +18,7 @@ impl TreeSegment {
                 return proposed_leaf_gain * 2;
             }
         }
-        return proposed_leaf_gain;
+        return proposed_leaf_gain + self.gain;
     }
 
     pub fn get_highest_gain(&self) -> i8 {
@@ -29,12 +29,15 @@ impl TreeSegment {
             return self.gain;
         }
         if self.minimize_leaves {
-            return self.get_lowest_gain() + self.gain;
+            return self.get_lowest_gain();
         }
         let mut proposed_leaf_gain = 0i8;
         for leaf_id in 0..self.leaves.len() {
             let leaf = &self.leaves[leaf_id];
             let proposition = leaf.get_highest_gain();
+            if proposition <= -5 {
+                return proposition;
+            }
             if proposition > proposed_leaf_gain {
                 proposed_leaf_gain = proposition;
             }
