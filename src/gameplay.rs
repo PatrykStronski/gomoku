@@ -35,23 +35,24 @@ fn print_board(board: &[[u8; 15]; 15]) {
     }
 }
 
-fn duel(board: &mut [[u8; 15]; 15], mut computer_time: u128) -> u8 {
+fn duel(board: &mut [[u8; 15]; 15], mut computer_time: u128, mut moves: u8) -> u8 {
     print_board(board);
     let user_turn = get_user_turn(board);
     board[user_turn[0]][user_turn[1]] = 1;
     if calculate_field_points(board, user_turn, 1) >= 5 {
-        println!("Computer thinking time: {}", computer_time);
+        println!("Computer thinking time: {} \n Number of Moves: {}", computer_time, moves);
         return 1;
     }
     let now = Instant::now();
     let computer_turn = get_single_turn(board);
     computer_time += now.elapsed().as_millis();
     board[computer_turn[0]][computer_turn[1]] = 2;
+    moves += 1;
     if calculate_field_points(board, computer_turn, 2) >= 5 {
-        println!("Computer thinking time: {}", computer_time);
+        println!("Computer thinking time: {} \n Number of Moves: {}", computer_time, moves);
         return 2;
     }
-    return duel(board, computer_time);
+    return duel(board, computer_time, moves);
 }
 
 pub fn start_new_game() {
@@ -61,7 +62,7 @@ pub fn start_new_game() {
     let starting_point_x = rand::thread_rng().gen_range(0, 15) as usize;
     let starting_point_y = rand::thread_rng().gen_range(0, 15) as usize;
     board[starting_point_x][starting_point_y] = computer_code;
-    let winner = duel(&mut board, 0);
+    let winner = duel(&mut board, 0, 0);
     print_board(&board);
     if winner == 1 {
         println!("YOU WON! CONGRATS!");
