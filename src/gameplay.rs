@@ -37,7 +37,7 @@ fn print_board(board: &[[u8; 15]; 15]) {
 
 fn duel(board: &mut [[u8; 15]; 15], mut computer_time: u128) -> u8 {
     print_board(board);
-    let user_turn = get_user_turn();
+    let user_turn = get_user_turn(board);
     board[user_turn[0]][user_turn[1]] = 1;
     if calculate_field_points(board, user_turn, 1) >= 5 {
         println!("Computer thinking time: {}", computer_time);
